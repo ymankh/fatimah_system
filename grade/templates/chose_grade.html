@@ -1,0 +1,62 @@
+{% extends "__bass.html" %}
+{% block title %} chose a grade {% endblock %}
+{% block contant %}
+
+    <div class="container ">
+        <div class="justify-content-center">
+            <div class="col-xl-6 col-lg-8 col-md-10 mx-auto p-4 bg-light border rounded-lg m-4">
+                <form>
+                    {% csrf_token %}
+                    <h2>اختر معلومات معلومات الجدول المراد عرضها</h2>
+                    
+                    <div class="mb-3 form-group row">
+                        <label for="grade" class="col-2 col-form-label">الصف</label>
+                            <div class="col-10">
+                                <select class="form-select" aria-label="Grade" id="grade" name="grade">
+                                    {% for grade in grades %}
+                                        <option value="{{ grade.id }}">{{ grade.grade }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    <div class="mb-3 form-group row">
+                        <label for="grade" class="col-2 col-form-label">الشعبة</label>
+                        <div class="col-10">
+                        <select class="form-select" aria-label="Section" name="section">
+                            {% for section in sections %}
+                                <option value="{{ section.id }}">{{ section.section }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="mb-3 form-group row">
+                        <label for="grade" class="col-2 col-form-label">المجموعة</label>
+                        <div class="col-10">
+                        <select class="form-select" aria-label="Group" name="group">
+                        <option value="0">_____</option>
+                            {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.group }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="mb-3 form-group row">
+                        <label for="grade" class="col-2 col-form-label">نوع الجدول</label>
+                        <div class="col-10">
+                        <select class="form-select" aria-label="Group" name="page">
+                            {% for page_option in page_options %}
+                                <option value="{{ page_option.0 }}">{{ page_option.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">اختيار</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "__bass.html" %}
+{% block title %} {{grade}} {{section}} مشاركة   {% endblock %}
+{% block contant %}
+    <div class="container">
+        <h1 class="m-4">جدول المشاركة للصف {{grade}} الشعبة {{section}}</h1>
+        <form method="post">
+        {% csrf_token %}
+            <table class="table table-hover border m-4">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">اسم الطالب</th>
+                    <th scope="col">طبيعة المشاركة</th>
+                    <th scope="col"><span style="width: 3rem;"> عدد المشاركات</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{% url 'student_information_edit' student_id=student.id %}"
+                               class="link-dark text">{{ student.full_name }}</a>
+                        </td>
+                        <td><select class="form-select" aria-label="participation" name="participations">
+                            <option disabled selected>---</option>
+                            {% for p_option in participation_options %}
+                                <option value="{{ student.id }},{{p_option.id}}"> {{ p_option }} </option>
+                            {% endfor %}
+                        </select></td>
+                        <td> {{student.p_count}} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="mt-2 mb-4">
+                <input id="send_absence_button" class="btn btn-primary mt-1 mb-4" type="submit">
+            </div>
+        </form>
+    </div>
+
+    </div>
+{% endblock %}

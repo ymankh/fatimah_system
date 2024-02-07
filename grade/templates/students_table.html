@@ -1,0 +1,102 @@
+{% extends "__bass.html" %}
+{% block title %} جدول الغيابات {% endblock %}
+{% block contant %}
+    <div class="container">
+        <h1 class="m-4">غيابات طلاب الصف {{grade}} الشعبة {{section}}</h1>
+        <table class="table table-hover border mt-4">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">اسم الطالب</th>
+                <th scope="col"> عدد الغيابات</th>
+                <th scope="col">
+                    <label class="switch">
+                        <input id="select_all" class="checkbox" type="checkbox" size="lg">
+                        <span class="slider round"></span>
+                    </label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <form method="post">
+                    {% csrf_token %}
+             {% for student in students %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a style="text-decoration:none" href="{% url 'student_information_edit' student_id=student.id %}"
+                           class="link-dark text">{{ student.full_name }}</a>
+                    </td>
+                    <td>{{ student.absence__count}}</td>
+{#                    <td>{{ student.grade }}</td>#}
+                    <td><label for="{{ student.id }}"></label><input type="checkbox" class="checkbox stu_checkbox"
+                                                                     id="{{ student.id }}" name="absence" value="{{ student.id }}" size="lg"></td>
+                </tr>
+            {% endfor %} 
+
+            </tbody>
+        </table>
+        <div class="mt-2 mb-4">
+                <input class="hidden d-none" type="text" name="students_absence" id="stu_absence_ID_holder">
+                <input id="send_absence_button" class="btn btn-primary mt-1 mb-4" type="submit" value="حفظ الغيابات">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let students_count = {{ students.count }};
+        let checked_count = 0;
+        let checkbox_list = document.querySelectorAll(".checkbox");
+        let students_checkbox = document.querySelectorAll(".stu_checkbox");
+        let select_all_checkbox = document.getElementById("select_all");
+        let stu_absence_ID_holder = document.getElementById("stu_absence_ID_holder")
+
+        function check_all() {
+            checkbox_list.forEach(function (checkbox) {
+                if (checkbox.type === "checkbox") {
+                    checkbox.checked = true;
+                }
+            })
+            checked_count = students_count;
+        }
+
+        {# set values of students ids in the form #}
+        function uncheck_all() {
+            checkbox_list.forEach(function (checkbox) {
+                if (checkbox.type === "checkbox") {
+                    checkbox.checked = false;
+                }
+            })
+            checked_count = 0;
+        }
+
+        checkbox_list.forEach(function (checkbox) {
+            if (checkbox.id === "select_all") {
+                checkbox.addEventListener('click', function () {
+                    if (!checkbox.checked) {
+                        uncheck_all()
+                    } else {
+                        check_all()
+                    }
+                    send_absence_to_form()
+                })
+            } else if (checkbox.type === "checkbox") {
+                checkbox.addEventListener('click', function () {
+                        if (!checkbox.checked) {
+                            checked_count--;
+                            select_all_checkbox.checked = false
+                        } else {
+                            checked_count++;
+                            if (checked_count === students_count) {
+                                select_all_checkbox.checked = true
+                            }
+                        }
+                        send_absence_to_form()
+                    }
+                )
+            }
+
+        })
+    </script>
+
+
+{% endblock %}

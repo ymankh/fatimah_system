@@ -1,0 +1,133 @@
+{% extends '__bass.html' %}
+{% block title %} student {{ student }} بيانات {% endblock %}
+{% block contant %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 bg-light mt-4 border rounded">
+                <div class="my-4 ">
+                    <form method="POST" name="add_note">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <h3> اضف ملاحظة للطالب {{ student.full_name }}. </h3>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" aria-label="Default select example" name="note_type">
+                                <option disabled selected>اختر نوع الملاحظة</option>
+                                {% for note_type in note_types %}
+                                    <option value="{{ note_type.id }}">{{ note_type }}
+                                        - {{ note_type.tag }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="note_text" class="form-label">نص الملاحظة</label>
+                            <input type="text" class="form-control" name="note_text" aria-describedby="note_text">
+                            <div id="note_text" class="form-text">ادخل الملاحظة هنا</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </form>
+                </div>
+            </div>
+            <div class="list-group  col-lg-5 my-4">
+                <span class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">الملاحظات المسجلة</h5>
+                    </div>
+                </span>
+                {% if notes %}
+                <form method="POST" id="delete_notes" name="delete_notes">
+                    {% csrf_token %}
+                    {% for note in notes %}
+                        <span
+                                class="list-group-item list-group-item-action flex-column align-items-start list-group-item-{{ note.note_type.tag }}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ note.note }}</h5>
+                                <small>{{ note.note_date }} <input class="form-check-input note-checkbox"
+                                                                   type="checkbox" name="deleted_notes_list"
+                                                                   value="{{ note.id }}" id="{{ note.id }}">
+                                </small>
+                            </div>
+                        </span>
+                    {% endfor %}
+                        <button type="submit" name="del_note_list" id="delete" class="btn btn-danger m-1">
+                            احذف المحدد</button>
+                        </form>
+                {% else %}
+                    <span
+                            class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h4 class="mb-1 text-muted">لا ملاحظات حتى الان...</h4>
+                        </div>
+                    </span>
+                {% endif %}
+            </div>
+            <div class="list-group col-lg-5 my-4">
+                <span class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">غيابات الطالب</h5>
+                    </div>
+                </span>
+                {% if absences %}
+                    <form method="POST" name="absence">
+                    {% csrf_token %}
+                        {% for absence in absences %}
+                            <div
+                                    class="list-group-item list-group-item-action flex-column align-items-start list-group-item-{{ note.note_type.tag }}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ absence.absence_date.isoformat }}  </h5>
+                                    <small>{{ note.note_date }} <input class="form-check-input note-checkbox"
+                                                                       type="checkbox" name="absences"
+                                                                       value="{{ absence.id }}" id="{{ absence.id }}">
+                                    </small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    <button type="submit" name="del_absence_list" id="delete2" class="btn btn-danger m-1">
+                            حذف المحدد</button>
+                    </form>
+                {% else %}
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h4 class="mb-1 text-muted">لا غيابات حتىالان...</h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="list-group col-lg-5 my-4">
+                <span class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">مشاركة الطالب</h5>
+                    </div>
+                </span>
+                {% if participations %}
+                <form method="POST" id="delete_participations" name="participations">
+                    {% csrf_token %}
+                    {% for participation in participations %}
+                        <span
+                                class="list-group-item list-group-item-action flex-column align-items-start list-group-item-{{ participation.participation_option.note_type.tag }}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ participation.participation_option.note }}</h5>
+                                <small>{{ participation.note_date }} <input class="form-check-input note-checkbox"
+                                                                   type="checkbox" name="deleted_participations_list"
+                                                                   value="{{ participation.id }}" id="p-{{ participation.id }}">
+                                </small>
+                            </div>
+                        </span>
+                    {% endfor %}
+                        <button type="submit" id="delete3" class="btn btn-danger m-1">
+                            Delete Selected</button>
+                        </form>
+                {% else %}
+                    <span
+                            class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h4 class="mb-1 text-muted">لا توجد اي مشاركات حتى الان...</h4>
+                        </div>
+                    </span>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

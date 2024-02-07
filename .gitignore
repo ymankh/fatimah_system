@@ -1,0 +1,9 @@
+db.sqlite3
+/csv/
+/enve/
+/__pycache__/
+/media/
+/static/
+pyvenv.cfg
+/migra
+*/migrations/
