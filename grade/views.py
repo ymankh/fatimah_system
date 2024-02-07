@@ -1,4 +1,9 @@
-from random import shuffle
+#bulet in
+from random import shuffle, random
+import os
+#3rd party
+from openpyxl import load_workbook
+#django
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth import login as auth_login
@@ -7,6 +12,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Count, QuerySet
 from django.shortcuts import get_object_or_404
+#my modeles
 from .models import (
     Student,
     StudentNote,
@@ -427,3 +433,27 @@ def chose_subject_for_skill_table(request, grade_id, section_id, group_id):
             )
     subjects = Subject.objects.filter(grade_id=grade_id)
     return render(request, "chose_skill.html", {"subjects": subjects})
+
+
+def export_emport_data(request):
+    if not request.user.is_staff:
+        return only_staff_message(request)
+    if request.method == "POST" and request.FILES:
+        uploaded_file = request.FILES["excelFile"]
+        wb = load_workbook(uploaded_file)
+        students = []
+        for sheetname in wb.sheetnames:
+            grade_name, section_name = sheetname.split(" ")
+            grade, _ = Grade.objects.get_or_create(grade=grade_name)
+            section, _ = Section.objects.get_or_create(section=section_name)
+            w_sheet = wb[sheetname]
+            for i in range(1, w_sheet.max_row):
+                students.append(Student(full_name= w_sheet[f"A{i+1}"].value,
+                    section=section,
+                    grade=grade,
+                    national_id='{:.10f}'.format(random())[2:] #to generate a random 10 diget ID
+                    ))
+        wb.save("test2.xlsx")
+        Student.objects.bulk_create(students)
+        return redirect("index")
+    return render(request, "export.html")

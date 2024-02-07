@@ -1,0 +1,45 @@
+{% extends "__bass.html" %}
+{% load static %}
+{% block title %}تصدير واستيرات البيانات{% endblock %}
+ 
+ {% block head %}
+    <style>
+    .center-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+{% endblock  %} 
+
+{% block contant %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 mt-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title ">حمل نموذج الادخال من هنا</h5>
+          <p class="card-text">اضغط على الزر بالاسفل لتقوم بتحميل الجدول الذي يمكنك من خلاله ادخال بيانات الطلبة.</p>
+          <a href='{% static "excel/students.xlsx" %}' class="btn btn-primary mt-4">تحميل</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mt-4 ">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">ارفع الملف المعدل هنا</h5>
+          <p class="card-text">يرجى رفع الملف المعدل هنا ليتم ادخال بيانات الطلبة على النظام.</p>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="file" class="form-control-file" id="excelFile" name="excelFile">
+            </div>
+            <button type="submit" class="btn btn-outline-secondary mt-2">ارفع الملف</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

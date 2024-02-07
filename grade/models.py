@@ -67,6 +67,10 @@ class Student(models.Model):
     @property
     def absence_count(self):
         return len(Absence.objects.filter(student=self))
+    
+    @property
+    def first_name(self):
+        return self.full_name.split(" ")[0]
 
     def __str__(self):
         return self.full_name

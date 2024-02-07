@@ -3,21 +3,21 @@
 {% block contant %}
 
     <div class="container  my-4">
-        <h1>اختار المهاة المراد قياسها</h1>
+        <h1 class="m-4">اختار المهارة المراد قياسها</h1>
         <div class="row">
             <div class="col-lg-6">
                 <form method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
                         {% if subjects %}
-                        <h3> Chose a Subject </h3>
+                        <h3> المادة </h3>
                         <select class="form-select" aria-label="subject" name="subject">
                             {% for subject in subjects %}
                                 <option value="{{ subject.id }}">{{ subject.name }}</option>
                             {% endfor %}
                         </select>
                         {% elif skills %}
-                        <h3> Chose a Skill </h3>
+                        <h3> المهارة </h3>
                         
                         <select class="form-select" aria-label="skill" name="skill"> 
                             {% for model in skills %}
@@ -29,7 +29,7 @@
                         </select>
                         {% endif %}
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">اختر</button>
                 </form>
             </div>
         </div>

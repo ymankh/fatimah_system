@@ -42,4 +42,5 @@ urlpatterns = [
         views.chose_subject_for_skill_table,
         name="chose_subject_for_skill_table",
     ),
+    path("export_emport/", views.export_emport_data, name="export_import"),
 ]
