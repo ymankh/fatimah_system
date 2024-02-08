@@ -455,5 +455,9 @@ def export_emport_data(request):
                     ))
         wb.save("test2.xlsx")
         Student.objects.bulk_create(students)
+        messages.add_message(
+            request,
+            level=messages.SUCCESS,
+             message="تم استيراد البيانات بنجاح")
         return redirect("index")
     return render(request, "export.html")
